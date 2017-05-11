@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  let!(:user) { User.create(username: 'test2', password: 'password') }
   describe 'validations' do
     it { should validate_presence_of(:username) }
     it "should have a unique name" do
@@ -22,7 +23,7 @@ RSpec.describe User, type: :model do
 
   describe 'model_methods' do
     describe '.find_by_credentials' do
-      let!(:user) { User.create(username: 'test2', password: 'password') }
+
       context 'when given correct credentials' do
         it 'should find the right user' do
           correct_user = User.find_by_credentials('test2', 'password')
@@ -35,6 +36,16 @@ RSpec.describe User, type: :model do
           incorrect_user = User.find_by_credentials('test3', 'password')
           expect(incorrect_user).to eq(nil)
         end
+      end
+    end
+  end
+
+  describe 'instance_methods' do
+    describe '#reset_session_token!' do
+      it 'resets the session token' do
+        old_session_token = user.session_token
+        user.reset_session_token!
+        expect(old_session_token).not_to eq(user.session_token)
       end
     end
   end
