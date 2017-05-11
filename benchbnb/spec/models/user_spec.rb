@@ -5,7 +5,6 @@ RSpec.describe User, type: :model do
     it { should validate_presence_of(:username) }
     it "should have a unique name" do
       User.create(username: 'test', password: 'password')
-      test_user = User.create(username: 'test', password: 'password')
       should validate_uniqueness_of(:username)
     end
 
